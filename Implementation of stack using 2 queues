@@ -1,0 +1,79 @@
+#include <stdio.h>
+#define m 100
+
+int q1[m], q2[m];
+int rear1 = -1, rear2 = -1, front1 = -1, front2 = -1;
+
+void enque(int x, int *rear, int *front, int q[m]){
+    if (*rear == -1 && *front == -1){
+        (*rear)++;
+        (*front)++;
+        q[*rear] = x;
+    }
+    else if (*rear == m-1){
+        printf("\nOverflowing!!!");
+    }
+    else{
+        (*rear)++;
+        q[*rear] = x;
+    }
+    //printf("\n%d is inserted!!", q[*rear]);
+}
+
+int deque(int *rear, int *front, int q[m]){
+    int d = -1;
+    if (*rear == -1 && *front == -1){
+        printf("\nUnderflowing!!");
+    }
+    else if (*rear == *front){
+        d = q[*front];
+        *rear = -1;
+        *front = -1;
+    }
+    else{
+        d = q[*front];
+        (*front)++;
+    }
+    return d;
+}
+
+int top(int *rear, int *front, int q[m]){
+    return q[*front];
+}
+
+int isEmpty(int q[m], int *rear, int *front){
+    if (*rear == -1 && *front == -1){
+        return 1;
+    }
+    return 0;
+}
+
+void push(int x){
+    enque(x, &rear1, &front1, q1);
+     while (!isEmpty(q2, &rear2, &front2)){
+        int y = top(&rear2, &front2, q2);
+        enque(y, &rear1, &front1, q1);
+        deque(&rear2, &front2, q2);
+    }
+     while (!isEmpty(q1, &rear1, &front1)){
+        int y = top(&rear1, &front1, q1);
+        enque(y, &rear2, &front2, q2);
+        deque(&rear1, &front1, q1);
+    }
+}
+
+void pop(){
+    printf("\t%d ", deque(&rear2, &front2, q2));
+}
+
+int main(){
+    push(1);
+    push(2);
+    push(3);
+    push(4);
+    pop();
+    pop();
+    pop();
+    pop();
+    return 0;
+}
